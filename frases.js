@@ -38,6 +38,16 @@ const personagens = [
 	new Personagem("Personagem 6", "personagem_6", "Frase 1", "Frase 2", "Frase 3")
 ];
 
+const elemento = {
+	bloco: {
+		fraseAleatoria: document.getElementById("frase_aleatoria"),
+		frases: document.getElementById("frases"),
+		personagens: document.getElementsByTagName("img"),
+		acertos: document.getElementById("acertos"),
+		erros: document.getElementById("erros"),
+		resultado: document.getElementById("resultado")
+	}
+};
 
 let frasesDisponiveis = [];
 
@@ -47,23 +57,15 @@ personagens.forEach(personagem => {
 	});
 });
 
-var blocoFraseAleatoria = document.getElementById("frase_aleatoria");
 blocoFraseAleatoria.innerText = fraseAleatoria.frase + " - Personagem " + personagemAleatorio;
 
 var personagemAleatorio = sortearFraseAleatoria();
 
-var blocoFrases = document.getElementById("frases");
-var blocosPersonagens = blocoFrases.getElementsByTagName("img");
-
 var acertos = 0;
-var blocoAcertos = document.getElementById("acertos");
 var erros = 0;
-var blocoErros = document.getElementById("erros");
 
 var acertosNecessarios = 7;
 var errosPermitidos = 7;
-
-var blocoResultado = document.getElementById("resultado");
 
 var jogoRodando = true;
 
