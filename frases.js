@@ -1,59 +1,17 @@
-var personagens = [
-	{
-		"nome": "Personagem 1",
-		"id": "personagem_1",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 2",
-		"id": "personagem_2",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 3",
-		"id": "personagem_3",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 4",
-		"id": "personagem_4",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 5",
-		"id": "personagem_5",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 6",
-		"id": "personagem_6",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	}
-];
+const Frase = function(frase, personagem) {
+	this.frase = frase;
+	this.personagem = personagem;
+};
+
+const Personagem = function(nome, id, ...frases) {
+	this.nome = nome;
+	this.id = id;
+	this.frases = [];
+
+	frases.forEach(function(frase) {
+		this.frases.push(new Frase(frase, this));
+	}.bind(this));
+};
 
 var frasesDisponiveis = [];
 for (var i = 0; i < personagens.length; i++) {
