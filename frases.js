@@ -23,21 +23,15 @@ const personagens = [
 ];
 
 
-var frasesDisponiveis = [];
-for (var i = 0; i < personagens.length; i++) {
-	var personagem = personagens[i];
-	var frases = personagem.frases;
+let frasesDisponiveis = [];
 
-	// frasesDisponiveis = frasesDisponiveis.concat(frases);
+personagens.forEach(personagem => {
+	let frases = personagem.frases;
 
-	for (var j = 0; j < frases.length; j++) {
-		var frase = {
-			"personagem_id": personagem.id,
-			"frase": frases[j]
-		};
-		frasesDisponiveis.push(frase);
-	}
-}
+	frases.forEach(frase => {
+		frasesDisponiveis.push(new Frase(frase, personagem.id));
+	});
+});
 
 function sortearFraseAleatoria() {
 	// var indiceAleatorio = Math.floor(Math.random() * personagens.length);
