@@ -13,6 +13,22 @@ const Personagem = function(nome, id, ...frases) {
 	}.bind(this));
 };
 
+const Helper = function() {
+	this.sortearPersonagem = function(frases) {
+		return frases[Math.floor(Math.random() * frasesDisponiveis.length)].personagem.id;
+	};
+
+	this.removerFrase = function(frases, indice) {
+		frases.splice(indice, 1);
+	};
+
+	this.adicionarFrase = function(array, valor) {
+		array.push(valor);
+	}
+};
+
+const helper = new Helper();
+
 const personagens = [
 	new Personagem("Personagem 1", "personagem_1", "Frase 1", "Frase 2", "Frase 3"),
 	new Personagem("Personagem 2", "personagem_2", "Frase 1", "Frase 2", "Frase 3"),
@@ -26,31 +42,13 @@ const personagens = [
 let frasesDisponiveis = [];
 
 personagens.forEach(personagem => {
-	let frases = personagem.frases;
-
-	frases.forEach(frase => {
-		frasesDisponiveis.push(new Frase(frase, personagem.id));
+	personagem.frases.forEach(frase => {
+		helper.adicionarFrase(frasesDisponiveis, new Frase(frase, personagem.id));
 	});
 });
 
-function sortearFraseAleatoria() {
-	// var indiceAleatorio = Math.floor(Math.random() * personagens.length);
-	// var personagemAleatorio = personagens[indiceAleatorio];
-
-	// var frases = personagemAleatorio.frases;
-	var indiceFraseAleatoria = Math.floor(Math.random() * frasesDisponiveis.length);
-	var fraseAleatoria = frasesDisponiveis[indiceFraseAleatoria];
-
-	var personagemAleatorio = fraseAleatoria.personagem_id;
-
-	var blocoFraseAleatoria = document.getElementById("frase_aleatoria");
-	blocoFraseAleatoria.innerText = fraseAleatoria.frase + " - Personagem " + personagemAleatorio;
-
-	frasesDisponiveis.splice(indiceFraseAleatoria, 1);
-	// console.log(frasesDisponiveis);
-
-	return personagemAleatorio;
-}
+var blocoFraseAleatoria = document.getElementById("frase_aleatoria");
+blocoFraseAleatoria.innerText = fraseAleatoria.frase + " - Personagem " + personagemAleatorio;
 
 var personagemAleatorio = sortearFraseAleatoria();
 
