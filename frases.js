@@ -13,6 +13,16 @@ const Personagem = function(nome, id, ...frases) {
 	}.bind(this));
 };
 
+const personagens = [
+	new Personagem("Personagem 1", "personagem_1", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 2", "personagem_2", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 3", "personagem_3", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 4", "personagem_4", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 5", "personagem_5", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 6", "personagem_6", "Frase 1", "Frase 2", "Frase 3")
+];
+
+
 var frasesDisponiveis = [];
 for (var i = 0; i < personagens.length; i++) {
 	var personagem = personagens[i];
