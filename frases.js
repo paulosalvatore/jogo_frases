@@ -14,8 +14,12 @@ const Personagem = function(nome, id, ...frases) {
 };
 
 const Helper = function() {
-	this.sortearPersonagem = function(frases) {
-		return frases[Math.floor(Math.random() * frasesDisponiveis.length)].personagem.id;
+	this.sortearPersonagem = function(personagens) {
+		return personagens[Math.floor(Math.random() * personagens.length)];
+	};
+
+	this.sortearFrase = function(frases) {
+		return frases[Math.floor(Math.random() * frases.length)];
 	};
 
 	this.removerFrase = function(frases, indice) {
@@ -24,7 +28,11 @@ const Helper = function() {
 
 	this.adicionarFrase = function(array, valor) {
 		array.push(valor);
-	}
+	};
+
+	this.editarTexto = function(elemento, texto) {
+		elemento.appendChild(document.createTextNode(texto));
+	};
 };
 
 const helper = new Helper();
@@ -49,53 +57,48 @@ const elemento = {
 	}
 };
 
-let frasesDisponiveis = [];
+let personagemAleatorio = helper.sortearPersonagem(personagens);
+let fraseAleatoria = helper.sortearFrase(personagemAleatorio.frases);
 
-personagens.forEach(personagem => {
-	personagem.frases.forEach(frase => {
-		helper.adicionarFrase(frasesDisponiveis, new Frase(frase, personagem.id));
-	});
-});
+helper.editarTexto(
+	elemento.bloco.fraseAleatoria,
+	`${fraseAleatoria.frase} - Personagem ${personagemAleatorio.id}`
+);
 
-blocoFraseAleatoria.innerText = fraseAleatoria.frase + " - Personagem " + personagemAleatorio;
+let acertos = 0;
+let erros = 0;
 
-var personagemAleatorio = sortearFraseAleatoria();
+let acertosNecessarios = 7;
+let errosPermitidos = 7;
 
-var acertos = 0;
-var erros = 0;
-
-var acertosNecessarios = 7;
-var errosPermitidos = 7;
-
-var jogoRodando = true;
+let jogoRodando = true;
 
 function processarClique() {
-	if (!jogoRodando)
-		return;
+	if (!jogoRodando) return;
 
-	var personagemId = this.getAttribute("data-personagem_id");
+	let personagemId = this.getAttribute("data-personagem_id");
 
 	if (personagemId === personagemAleatorio) {
 		acertos++;
-		blocoAcertos.innerText = "Acertos: " + acertos;
+		helper.editarTexto(elemento.bloco.acertos, `Acertos: ${acertos}`);
 	} else {
 		erros++;
-		blocoErros.innerText = "Erros: " + erros;
+		helper.editarTexto(elemento.bloco.erros, `Erros: ${erros}`);
 	}
 
 	if (erros === errosPermitidos) {
-		blocoResultado.innerText = "Você perdeu.";
+		helper.editarTexto(elemento.bloco.resultado, "Você perdeu.");
 		jogoRodando = false;
 	}
 	else if (acertos === acertosNecessarios) {
-		blocoResultado.innerText = "Você ganhou.";
+		helper.editarTexto(elemento.bloco.resultado, "Você ganhou.");
 		jogoRodando = false;
 	}
 	else {
-		personagemAleatorio = sortearFraseAleatoria();
+		personagemAleatorio = helper.sortearPersonagem(personagens);
 	}
 }
 
-for (var i = 0; i < blocosPersonagens.length; i++) {
-	blocosPersonagens[i].onclick = processarClique;
+for (personagem in elemento.bloco.personagens) {
+	personagem.onclick = processarClique;
 }
