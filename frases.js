@@ -1,139 +1,104 @@
-var personagens = [
-	{
-		"nome": "Personagem 1",
-		"id": "personagem_1",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 2",
-		"id": "personagem_2",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 3",
-		"id": "personagem_3",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 4",
-		"id": "personagem_4",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 5",
-		"id": "personagem_5",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	},
-	{
-		"nome": "Personagem 6",
-		"id": "personagem_6",
-		"frases": [
-			"Frase 1",
-			"Frase 2",
-			"Frase 3"
-		]
-	}
+const Frase = function(frase, personagem) {
+	this.frase = frase;
+	this.personagem = personagem;
+};
+
+const Personagem = function(nome, id, ...frases) {
+	this.nome = nome;
+	this.id = id;
+	this.frases = [];
+
+	frases.forEach(function(frase) {
+		this.frases.push(new Frase(frase, this));
+	}.bind(this));
+};
+
+const Helper = function() {
+	this.sortearPersonagem = function(personagens) {
+		return personagens[Math.floor(Math.random() * personagens.length)];
+	};
+
+	this.sortearFrase = function(frases) {
+		return frases[Math.floor(Math.random() * frases.length)];
+	};
+
+	this.removerFrase = function(frases, indice) {
+		frases.splice(indice, 1);
+	};
+
+	this.adicionarFrase = function(array, valor) {
+		array.push(valor);
+	};
+
+	this.editarTexto = function(elemento, texto) {
+		elemento.appendChild(document.createTextNode(texto));
+	};
+};
+
+const helper = new Helper();
+
+const personagens = [
+	new Personagem("Personagem 1", "personagem_1", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 2", "personagem_2", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 3", "personagem_3", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 4", "personagem_4", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 5", "personagem_5", "Frase 1", "Frase 2", "Frase 3"),
+	new Personagem("Personagem 6", "personagem_6", "Frase 1", "Frase 2", "Frase 3")
 ];
 
-var frasesDisponiveis = [];
-for (var i = 0; i < personagens.length; i++) {
-	var personagem = personagens[i];
-	var frases = personagem.frases;
-
-	// frasesDisponiveis = frasesDisponiveis.concat(frases);
-
-	for (var j = 0; j < frases.length; j++) {
-		var frase = {
-			"personagem_id": personagem.id,
-			"frase": frases[j]
-		};
-		frasesDisponiveis.push(frase);
+const elemento = {
+	bloco: {
+		fraseAleatoria: document.getElementById("frase_aleatoria"),
+		frases: document.getElementById("frases"),
+		personagens: document.getElementsByTagName("img"),
+		acertos: document.getElementById("acertos"),
+		erros: document.getElementById("erros"),
+		resultado: document.getElementById("resultado")
 	}
-}
+};
 
-function sortearFraseAleatoria() {
-	// var indiceAleatorio = Math.floor(Math.random() * personagens.length);
-	// var personagemAleatorio = personagens[indiceAleatorio];
+let personagemAleatorio = helper.sortearPersonagem(personagens);
+let fraseAleatoria = helper.sortearFrase(personagemAleatorio.frases);
 
-	// var frases = personagemAleatorio.frases;
-	var indiceFraseAleatoria = Math.floor(Math.random() * frasesDisponiveis.length);
-	var fraseAleatoria = frasesDisponiveis[indiceFraseAleatoria];
+helper.editarTexto(
+	elemento.bloco.fraseAleatoria,
+	`${fraseAleatoria.frase} - Personagem ${personagemAleatorio.id}`
+);
 
-	var personagemAleatorio = fraseAleatoria.personagem_id;
+let acertos = 0;
+let erros = 0;
 
-	var blocoFraseAleatoria = document.getElementById("frase_aleatoria");
-	blocoFraseAleatoria.innerText = fraseAleatoria.frase + " - Personagem " + personagemAleatorio;
+let acertosNecessarios = 7;
+let errosPermitidos = 7;
 
-	frasesDisponiveis.splice(indiceFraseAleatoria, 1);
-	// console.log(frasesDisponiveis);
-
-	return personagemAleatorio;
-}
-
-var personagemAleatorio = sortearFraseAleatoria();
-
-var blocoFrases = document.getElementById("frases");
-var blocosPersonagens = blocoFrases.getElementsByTagName("img");
-
-var acertos = 0;
-var blocoAcertos = document.getElementById("acertos");
-var erros = 0;
-var blocoErros = document.getElementById("erros");
-
-var acertosNecessarios = 7;
-var errosPermitidos = 7;
-
-var blocoResultado = document.getElementById("resultado");
-
-var jogoRodando = true;
+let jogoRodando = true;
 
 function processarClique() {
-	if (!jogoRodando)
-		return;
+	if (!jogoRodando) return;
 
-	var personagemId = this.getAttribute("data-personagem_id");
+	let personagemId = this.getAttribute("data-personagem_id");
 
 	if (personagemId === personagemAleatorio) {
 		acertos++;
-		blocoAcertos.innerText = "Acertos: " + acertos;
+		helper.editarTexto(elemento.bloco.acertos, `Acertos: ${acertos}`);
 	} else {
 		erros++;
-		blocoErros.innerText = "Erros: " + erros;
+		helper.editarTexto(elemento.bloco.erros, `Erros: ${erros}`);
 	}
 
 	if (erros === errosPermitidos) {
-		blocoResultado.innerText = "Você perdeu.";
+		helper.editarTexto(elemento.bloco.resultado, "Você perdeu.");
 		jogoRodando = false;
 	}
 	else if (acertos === acertosNecessarios) {
-		blocoResultado.innerText = "Você ganhou.";
+		helper.editarTexto(elemento.bloco.resultado, "Você ganhou.");
 		jogoRodando = false;
 	}
 	else {
-		personagemAleatorio = sortearFraseAleatoria();
+		personagemAleatorio = helper.sortearPersonagem(personagens);
 	}
 }
 
-for (var i = 0; i < blocosPersonagens.length; i++) {
-	blocosPersonagens[i].onclick = processarClique;
+for (personagem in elemento.bloco.personagens) {
+	personagem.onclick = processarClique;
 }
